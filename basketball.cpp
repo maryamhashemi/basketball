@@ -75,12 +75,7 @@ bool running=true;
 	ellipseRGBA(screen,160,301,19,4,255,0,0,255);	//basket
 	lineRGBA(screen,120,230,120,310,0,0,255,255);	//middle side
 	
-//.................................................ground.......................................	
 
-	lineRGBA(screen,0,550,200,400,0,0,255,255);		//right side
-	lineRGBA(screen,200,400,1300,400,0,0,255,255);	//up side		
-	lineRGBA(screen,1200,400,1200,700,0,0,255,255);	//middle side vetical
-	lineRGBA(screen,70,500,1300,500,0,0,255,255);	//middle side horizontal
 
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
