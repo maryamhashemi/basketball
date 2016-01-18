@@ -6,8 +6,13 @@
 #include<cmath>
 using namespace std;
 
+
+
 int main()
 {
+
+	//ball = SDL_LoadBMP("ss.bmp");	
+
 	//initialize the surface  "screen"
 	SDL_Surface *screen = SDL_SetVideoMode(1300, 700 ,32, 0);
 
@@ -67,30 +72,6 @@ int main()
 	//game loop
 	while(running)
 	{	
-	//display basketball board in "screen"			
-	lineRGBA(screen,100,240,140,220,0,0,255,255);	// up     side  big rectangle
-	lineRGBA(screen,100,240,100,320,0,0,255,255);	// left   side  big rectangle
-	lineRGBA(screen,100,320,140,300,0,0,255,255);	// down   side  big rectangle
-	lineRGBA(screen,140,220,140,300,0,0,255,255);	// right  side  big rectangle
-	
-	lineRGBA(screen,110,280,130,270,0,0,255,255);	// up     side  small rectangle
-	lineRGBA(screen,110,280,110,310,0,0,255,255);	// left   side  small rectangle
-	lineRGBA(screen,110,310,130,300,0,0,255,255);	// down   side  small rectangle
-	lineRGBA(screen,130,300,130,270,0,0,255,255);	// right  side  small rectangle
-
-	boxRGBA(screen,120,300,140,302,255,0,0,255);	//bar of basket
-
-	ellipseRGBA(screen,160,301,20,5,255,0,0,255);	// big   ring  of basket
-	ellipseRGBA(screen,160,301,19,4,255,0,0,255);	// small ring  of basket
-
-	lineRGBA(screen,120,230,120,310,0,0,255,255);	//middle line of basketball board
-	
-	//display court of basketball
-	lineRGBA(screen,0,550,200,400,0,0,255,255);	//right side
-	lineRGBA(screen,200,400,1300,400,0,0,255,255);	//up side		
-	lineRGBA(screen,1200,400,1200,700,0,0,255,255);	//middle side vetical
-	lineRGBA(screen,70,500,1300,500,0,0,255,255);	//middle side horizontal	
-	
 
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
@@ -121,6 +102,8 @@ int main()
 							{
 								x_click=event.button.x;
 								y_click=event.button.y;
+								
+								//teta=atan(2*a*(x_ball -x_click));
 
 								a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
@@ -153,13 +136,9 @@ int main()
 			else if(abs(y_click-y0_ball)>100 && abs(x_click-x0_ball)<=50)
 				x_ball-=1;
 
-			else if(abs(x_click-x0_ball)>=200)
-				x_ball-=8;
-
 			else
-				x_ball-=6;
+				x_ball-=4;
 		}
-	
 
 		//check whether the ball hit the ground or not 
 		if(y_ball>=560 )	
@@ -230,9 +209,10 @@ int main()
 		}
 		
 
-		//check whether the ball hit the basketbal board or not
-		if( (	(x_ball>=153 && x_ball<=156 && y_ball>=258 && y_ball<=336) || ( ((x_ball>=157 && x_ball<=181) || (x_ball>=196 && x_ball<=216) ) && (y_ball>=317 && y_ball<=337))) && flag3==0 )
-
+		//check whether the ball hit the basketbal board or not		
+		if(((x_ball>=153 && x_ball<=156 && y_ball>=258 && y_ball<=336)
+		  || (((x_ball>=157 && x_ball<=181) || (x_ball>=196 && x_ball<=216)) 
+		  && (y_ball>=317 && y_ball<=337))) && flag3==0 )
 		{
 			x_click=x_ball;
 			y_click=y_ball;
@@ -256,10 +236,6 @@ int main()
 			x=x_ball;
 			y=y_ball;
 
-
-			x_ball+=3;
-				
-		}
 
 			x_ball+=3;
 				
