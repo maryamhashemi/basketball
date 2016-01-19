@@ -7,7 +7,8 @@
 #include <SDL/SDL_mixer.h>
 using namespace std;
 
-
+void angel1(float,float);
+void angel2(float,float);
 
 int main()
 {
@@ -42,7 +43,10 @@ int main()
 	float y=y0_ball;
 
 	//intialize
-	float a;	
+	float a;
+
+	//tilt angel
+	float teta;	
 
 	//whether the game loop is running or not	
 	bool running=true;
@@ -111,6 +115,9 @@ int main()
 								x_click=event.button.x;
 								y_click=event.button.y;
 								
+								teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
+								cout<<teta<<endl;
+								
 								a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
 								flag1=1;
@@ -136,14 +143,18 @@ int main()
 			x=x_ball;
 			y=y_ball;
 
-			if(abs(y_click-y0_ball)>=50 && abs(y_click-y0_ball)<=100 && abs(x_click-x0_ball)<=50)
-				x_ball-=2;
-
-			else if(abs(y_click-y0_ball)>100 && abs(x_click-x0_ball)<=50)
-				x_ball-=1;
-
-			else
+			//angel1(teta,x_ball);
+			if(teta<0.26)
+				x_ball-=14;
+			else if(teta>=0.26 && teta<0.52)
+				x_ball-=8;
+			else if(teta>=0.52 && teta<0.78)
+				x_ball-=6;
+			else if(teta>=0.78 && teta<1.04)
 				x_ball-=4;
+			else if(teta>=1.04)
+				x_ball-=2;
+			
 		}
 
 		//check whether the ball hit the ground or not 
@@ -195,11 +206,20 @@ int main()
 			{
 				x=x_ball;
 				y=y_ball;
+
 				
-				if(abs(y_click-y0_ball)>=50 && abs(y_click-y0_ball)<=100 && abs(x_click-x0_ball)<=50)
-					x_ball-=2;				
-				else
-					x_ball-=3;
+				//angel1(teta,x_ball);
+
+				if(teta<0.26)
+					x_ball-=14;
+				else if(teta>=0.26 && teta<0.52)
+					x_ball-=8;
+				else if(teta>=0.52 && teta<0.78)
+					x_ball-=6;
+				else if(teta>=0.78 && teta<1.04)
+					x_ball-=4;
+				else if(teta>=1.04)
+					x_ball-=2;
 				
 				SDL_Delay(2);
 			}
@@ -208,7 +228,21 @@ int main()
 				x=x_ball;
 				y=y_ball;
 
-				x_ball+=3;
+
+			if(teta<0.26)
+				x_ball+=11;
+			else if(teta>=0.26 && teta<0.52)
+				x_ball+=6;
+			else if(teta>=0.52 && teta<0.78)
+				x_ball+=4;
+			else if(teta>=0.78 && teta<1.04)
+				x_ball+=2;
+			else if(teta>=1.04)
+				x_ball+=1;
+	
+
+				//angel2(teta,x_ball);
+
 
 
 				SDL_Delay(2);
@@ -217,7 +251,7 @@ int main()
 		
 
 		//check whether the ball hit the basketbal board or not		
-		if(((x_ball>=153 && x_ball<=156 && y_ball>=258 && y_ball<=336)
+		if(((x_ball>=147 && x_ball<=156 && y_ball>=258 && y_ball<=336)
 		  || (((x_ball>=157 && x_ball<=181) || (x_ball>=196 && x_ball<=216)) 
 		  && (y_ball>=317 && y_ball<=337))) && flag3==0 )
 		{
@@ -245,8 +279,17 @@ int main()
 			y=y_ball;
 
 
-			x_ball+=3;
-				
+			if(teta<0.26)
+				x_ball+=11;
+			else if(teta>=0.26 && teta<0.52)
+				x_ball+=6;
+			else if(teta>=0.52 && teta<0.78)
+				x_ball+=4;
+			else if(teta>=0.78 && teta<1.04)
+				x_ball+=2;
+			else if(teta>=1.04)
+				x_ball+=1;
+			//angel2(teta,x_ball);		
 		}
 
 		SDL_BlitSurface(image,NULL,screen,NULL);			
@@ -263,3 +306,31 @@ int main()
 	SDL_Delay(200);
 	return 0;
 }
+
+/*void angel1(float teta,float x_ball)
+{
+	if(teta<0.26)
+		x_ball-=14;
+	else if(teta>=0.26 && teta<0.52)
+		x_ball-=8;
+	else if(teta>=0.52 && teta<0.78)
+		x_ball-=6;
+	else if(teta>=0.78 && teta<1.04)
+		x_ball-=4;
+	else if(teta>=1.04)
+		x_ball-=2;
+}
+
+void angel2(float teta,float x_ball)
+{
+	if(teta<0.26)
+		x_ball+=11;
+	else if(teta>=0.26 && teta<0.52)
+		x_ball+=6;
+	else if(teta>=0.52 && teta<0.78)
+		x_ball+=4;
+	else if(teta>=0.78 && teta<1.04)
+		x_ball+=2;
+	else if(teta>=1.04)
+		x_ball+=1;
+}*/
