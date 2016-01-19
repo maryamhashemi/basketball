@@ -1,9 +1,10 @@
 #include <iostream>
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
-#include<ctime>
-#include<stdlib.h>
-#include<cmath>
+#include <ctime>
+#include <stdlib.h>
+#include <cmath>
+#include <SDL/SDL_mixer.h>
 using namespace std;
 
 
@@ -59,7 +60,14 @@ int main()
 	boxRGBA(screen, 0,0, 1300, 700, 255,255,255, 255);     
 
 	//display ball in "image"
-	filledEllipseRGBA(image,x0_ball,y0_ball,7,7,0,0,0,255); 
+	filledEllipseRGBA(image,x0_ball,y0_ball,7,7,0,0,0,255);
+	
+	//initialize the sound effect
+	Mix_Chunk *effect1;
+	Mix_Chunk *effect2;
+	Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+	effect1 = Mix_LoadWAV("muro_2.wav");
+	effect2 = Mix_LoadWAV("ball_wood_schiacc.wav"); 
 	
 
 	float x0=x0_ball;
@@ -103,8 +111,6 @@ int main()
 								x_click=event.button.x;
 								y_click=event.button.y;
 								
-								//teta=atan(2*a*(x_ball -x_click));
-
 								a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
 								flag1=1;
@@ -143,6 +149,7 @@ int main()
 		//check whether the ball hit the ground or not 
 		if(y_ball>=560 )	
 		{	
+			Mix_PlayChannel(-1,effect1,0);
 			counter++;
 			//Which side has the ball hit the ground left or right
 
@@ -214,6 +221,7 @@ int main()
 		  || (((x_ball>=157 && x_ball<=181) || (x_ball>=196 && x_ball<=216)) 
 		  && (y_ball>=317 && y_ball<=337))) && flag3==0 )
 		{
+			Mix_PlayChannel(-1,effect2,0);
 			x_click=x_ball;
 			y_click=y_ball;
 			
@@ -247,6 +255,10 @@ int main()
 	}
 
 	SDL_FreeSurface(image);
+	Mix_FreeChunk(effect1);
+	Mix_FreeChunk(effect2);
+	Mix_CloseAudio();
+	Mix_Quit();
 	SDL_Quit;	
 	SDL_Delay(200);
 	return 0;
