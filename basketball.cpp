@@ -19,7 +19,7 @@ int main()
 	SDL_Surface *screen = SDL_SetVideoMode(1300, 700 ,32, 0);
 
 	//initialize the surface  "image"
-	SDL_Surface *image = SDL_LoadBMP("court.bmp");;
+	SDL_Surface *image = SDL_LoadBMP("court.bmp");
 	
 	//Specify the initial position of the ball randomly
 	srand(time(0));
@@ -60,11 +60,21 @@ int main()
 	//whether the ball hit the basketball board or not
 	bool flag3=0;
 
+	//score
+	int score=0;
+
 	//change the background color
-	boxRGBA(screen, 0,0, 1300, 700, 255,255,255, 255);     
+	boxRGBA(screen, 0,0, 1300, 700, 255,255,255, 255);   
+
+	boxRGBA(image, 183,326, 198, 328, 0,0,0, 255);	//goal
+	boxRGBA(image, 157,317, 181, 337, 0,0,0, 255);  //left ring
+	boxRGBA(image, 196,317, 216, 337, 0,0,0, 255); //right ring   
+    
+	circleRGBA(image, x_motion,y_motion-7,7, 0,0,0, 255);//circle for point
+
 
 	//display ball in "image"
-	filledEllipseRGBA(image,x0_ball,y0_ball,7,7,0,0,0,255);
+	//filledEllipseRGBA(image,x0_ball,y0_ball,7,7,0,0,0,255);
 	
 	//initialize the sound effect
 	Mix_Chunk *effect1;
@@ -84,7 +94,12 @@ int main()
 	//game loop
 	while(running)
 	{	
-
+	SDL_Surface *image = SDL_LoadBMP("court.bmp");
+	if(flag1==0 && flag2==0 && flag3==0)
+	{
+		filledEllipseRGBA(image,x0_ball,y0_ball,7,7,0,0,0,255);
+		circleRGBA(image, x_motion,y_motion-7,7, 0,0,0, 255);
+	}
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
 		{
@@ -116,7 +131,7 @@ int main()
 								y_click=event.button.y;
 								
 								teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
-								cout<<teta<<endl;
+								cout<<teta<<endl<<x_click<<endl<<y_click<<endl;
 								
 								a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
@@ -137,7 +152,7 @@ int main()
 		{	
 			y_ball= a*(x_ball -x_click)*(x_ball -x_click) + y_click;
 			
-			filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
+			//filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
 			filledEllipseRGBA(image,x_ball,y_ball,7,7,0,0,0,255);
 			
 			x=x_ball;
@@ -152,8 +167,12 @@ int main()
 				x_ball-=6;
 			else if(teta>=0.78 && teta<1.04)
 				x_ball-=4;
-			else if(teta>=1.04)
+			else if(teta>=1.04 && teta<1.27)
+				x_ball-=3;
+			else if(teta>=1.27 && teta<1.47)
 				x_ball-=2;
+			else if(teta>=1.47)
+				x_ball-=0.3;
 			
 		}
 
@@ -199,7 +218,7 @@ int main()
 		{
 			y_ball= a*(x_ball -x_click)*(x_ball -x_click) + y_click;
 
-			filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
+			//filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
 			filledEllipseRGBA(image,x_ball,y_ball,7,7,0,0,0,255);
 	
 			if(x>x_ball)
@@ -218,8 +237,12 @@ int main()
 					x_ball-=6;
 				else if(teta>=0.78 && teta<1.04)
 					x_ball-=4;
-				else if(teta>=1.04)
+				else if(teta>=1.04 && teta<1.27)
+					x_ball-=3;
+				else if(teta>=1.27 && teta<1.47)
 					x_ball-=2;
+				else if(teta>=1.47)
+					x_ball-=0.3;
 				
 				SDL_Delay(2);
 			}
@@ -237,21 +260,26 @@ int main()
 				x_ball+=4;
 			else if(teta>=0.78 && teta<1.04)
 				x_ball+=2;
-			else if(teta>=1.04)
+			else if(teta>=1.04 && teta<1.27)
+				x_ball+=1.5;
+			else if(teta>=1.27 && teta<1.47)
 				x_ball+=1;
+			else if(teta>=1.47)
+				x_ball+=0.1;
+			
 	
 
 				//angel2(teta,x_ball);
 
 
 
-				SDL_Delay(2);
+				//SDL_Delay(2);
 			}
 		}
 		
 
 		//check whether the ball hit the basketbal board or not		
-		if(((x_ball>=147 && x_ball<=156 && y_ball>=258 && y_ball<=336)
+		if(((x_ball>=147 && x_ball<=160 && y_ball>=258 && y_ball<=336)
 		  || (((x_ball>=157 && x_ball<=181) || (x_ball>=196 && x_ball<=216)) 
 		  && (y_ball>=317 && y_ball<=337))) && flag3==0 )
 		{
@@ -272,7 +300,7 @@ int main()
 		{
 			y_ball= 4*a*(x_ball -x_click)*(x_ball -x_click) + y_click;
 
-			filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
+		//	filledEllipseRGBA(image,x,y,7,7,255,255,255,255);
 			filledEllipseRGBA(image,x_ball,y_ball,7,7,0,0,0,255);
 
 			x=x_ball;
@@ -287,13 +315,23 @@ int main()
 				x_ball+=4;
 			else if(teta>=0.78 && teta<1.04)
 				x_ball+=2;
-			else if(teta>=1.04)
+			else if(teta>=1.04 && teta<1.27)
+				x_ball+=1.5;
+			else if(teta>=1.27 && teta<1.47)
 				x_ball+=1;
+			else if(teta>=1.47)
+				x_ball+=0.1;
 			//angel2(teta,x_ball);		
 		}
 
+		if(x_ball>=183 && x_ball<=198 && y_ball>=326 && y_ball<=328)
+		{
+			score++;
+			cout<<score<<endl;
+		}	
+
 		SDL_BlitSurface(image,NULL,screen,NULL);			
-		SDL_Delay(2);
+		//SDL_Delay(2);
 		SDL_Flip(screen);
 	}
 
