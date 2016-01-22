@@ -79,6 +79,8 @@ int showmenu1(SDL_Surface* screen , TTF_Font* font  )
 						{
 							if(selected_item[i]!=1)
 							{
+								Mix_PlayChannel(-1,effect4,0);
+
 								SDL_FreeSurface(menu[i]);
 								menu[i]=TTF_RenderText_Solid(font,menuitem[i],color[1]);
 								selected_item[i]=1;									
@@ -109,12 +111,14 @@ int showmenu1(SDL_Surface* screen , TTF_Font* font  )
 						{
 							if(x>=position[i].x && x<=position[i].x + position[i].w && y>=position[i].y && y<=position[i].y + position[i].h)
 							{	
-								Mix_PlayChannel(-1,effect4,0);
-								SDL_Delay(1000);
+								Mix_PlayChannel(-1,effect5,0);
+								SDL_Delay(500);
 
 								SDL_FreeSurface( menu[0]);
 								SDL_FreeSurface( menu[1]);
 								SDL_FreeSurface(image);
+								Mix_FreeChunk(effect4);
+								Mix_FreeChunk(effect5);
 
 								return i;
 							}	
@@ -143,17 +147,17 @@ int showmenu2(SDL_Surface* screen , TTF_Font* font)
 
 	position[0].x=150;
 	position[0].y=450;
-	position[0].w=200;
+	position[0].w=100;
 	position[0].h=200;
 
 	position[1].x=530;
 	position[1].y=450;
-	position[1].w=200;
+	position[1].w=100;
 	position[1].h=200;
 
 	position[2].x=1000;
 	position[2].y=450;
-	position[2].w=200;
+	position[2].w=100;
 	position[2].h=200;
 	
 	SDL_Rect position_logo;
@@ -203,6 +207,8 @@ int showmenu2(SDL_Surface* screen , TTF_Font* font)
 					{
 						if( x>=position[i].x && x<=position[i].x+position[i].w && y>=position[i].y && y<=position[i].y+position[i].h )
 						{
+							Mix_PlayChannel(-1,effect4,0);
+
 							if(selected_item[i]!=1)
 							{
 								SDL_FreeSurface(menu[i]);
@@ -236,13 +242,15 @@ int showmenu2(SDL_Surface* screen , TTF_Font* font)
 						{
 							if(x>=position[i].x && x<=position[i].x + position[i].w && y>=position[i].y && y<=position[i].y + position[i].h)
 							{	
-								Mix_PlayChannel(-1,effect4,0);
+								Mix_PlayChannel(-1,effect5,0);
 								SDL_Delay(1000);
 								
 								SDL_FreeSurface( menu[0]);
 								SDL_FreeSurface( menu[1]);
 								SDL_FreeSurface( menu[2]);
 								SDL_FreeSurface(image);
+								Mix_FreeChunk(effect4);
+								Mix_FreeChunk(effect5);
 
 								return i;
 							}	
@@ -255,12 +263,14 @@ int showmenu2(SDL_Surface* screen , TTF_Font* font)
 					if(event.key.keysym.sym=SDLK_ESCAPE)
 					{
 						Mix_PlayChannel(-1,effect5,0);
-						SDL_Delay(1000);
+						SDL_Delay(500);
 
 						SDL_FreeSurface( menu[0]);
 						SDL_FreeSurface( menu[1]);
 						SDL_FreeSurface( menu[2]);
 						SDL_FreeSurface(image);
+						Mix_FreeChunk(effect4);
+						Mix_FreeChunk(effect5);
 
 						return 0;
 					}
@@ -330,7 +340,7 @@ int main()
 	SDL_Surface *screen = SDL_SetVideoMode(1300, 700 ,32, 0);
 
 	//initialize the surface  "image"
-	SDL_Surface* image = SDL_LoadBMP("court.bmp");
+	
 	
 	//Specify the initial position of the ball randomly
 	srand(time(0));
@@ -412,22 +422,8 @@ int main()
 	TTF_SetFontStyle(font,TTF_STYLE_ITALIC );
 	TTF_GetFontStyle(font);
 
-	
-	
-	//-------------
 	float x0=x0_ball;
 	float y0=y0_ball;
-	//------------------------------------------------------------
-	boxRGBA(image,171,245,179,253,0,0,0,255);	//	up
-	boxRGBA(image,155,255,163,263,0,0,0,255);	//	down
-	//-----------------------------------------------------------
-	boxRGBA(image,157,321,180,330,0,0,0,255);
-	boxRGBA(image,203,321,215,330,0,0,0,255);
-	boxRGBA(image,147,258,160,336,0,0,0,255);
-
-	//------------------------------------------------------------
-	filledEllipseRGBA(image,x_ball,y_ball,7,7,0,0,0,255);
-	//------------------------------------------------------------
 	
 
 	//show  first menu in screen
@@ -447,7 +443,8 @@ int main()
 	while(running)
 	{
 	
-		//image = SDL_LoadBMP("court.bmp");
+		SDL_Surface* image = SDL_LoadBMP("court.bmp");
+		filledEllipseRGBA(image,x_ball,y_ball,7,7,255,128,0,255);
 
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
@@ -471,11 +468,11 @@ int main()
 					switch(event.button.button)
 					{
 						case(SDL_BUTTON_LEFT):
-						{	
-							if(event.button.x<=x0 && event.button.y<=y0 && flag1==0)	 
+						{	x_click=event.button.x;
+							y_click=event.button.y;
+							if(x_click<=x0 && y_click<=y0 && flag1==0)	 
 							{
-								x_click=event.button.x;
-								y_click=event.button.y;
+								
 								
 								a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 								
@@ -524,7 +521,9 @@ int main()
 								flag7=0;
 								flag8=0;
 								
-								filledEllipseRGBA(image,x_ball,y_ball,7,7,0,0,0,255);
+								counter=0;
+								
+								filledEllipseRGBA(image,x_ball,y_ball,7,7,255,128,0,255);
 
 								running=true;
 								
@@ -563,7 +562,6 @@ int main()
 				x0_ball=x_ball;
 				y0_ball=559;
 
-				teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
 				iterrator=angle1(teta);
 			}
 			
@@ -576,8 +574,7 @@ int main()
 				
 				x0_ball=x_ball;
 				y0_ball=559;
-				
-				teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
+
 				iterrator=angle2(teta);
 					
 			}
@@ -611,9 +608,6 @@ int main()
 			
 			a=4*a;
 			
-			//teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
-			//iterrator=angle2(teta);
-		
 			iterrator=-1*iterrator;
 			
 			flag1=1;
@@ -639,8 +633,7 @@ int main()
 			y0_ball=y_ball;
 			
 			a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
-			
-			teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
+
 			iterrator=angle2(teta);			
 			
 			flag1=1;
@@ -666,8 +659,7 @@ int main()
 			y0_ball=y_ball;
 			
 			a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
-		
-			teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
+
 			iterrator=angle1(teta);
 
 			flag1=1;
@@ -694,7 +686,6 @@ int main()
 			
 			a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
-			teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
 			iterrator=angle2(teta);
 
 			flag1=1;
@@ -720,8 +711,7 @@ int main()
 			y0_ball=y_ball;
 			
 			a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
-			
-			teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
+
 			iterrator=angle1(teta);			
 			
 			flag1=1;
@@ -748,7 +738,6 @@ int main()
 			
 			a=(y0_ball-y_click)/((x0_ball-x_click)*(x0_ball-x_click));
 
-			teta=atan(abs((y0_ball-y_click)/(x0_ball-x_click)));
 			iterrator=angle2(teta);
 
 			flag1=1;
@@ -767,17 +756,16 @@ int main()
 		{
 
 			y_ball= a*(x_ball -x_click)*(x_ball -x_click) + y_click;
-			filledEllipseRGBA(image,x_ball,y_ball,7,7,255,128,0,255);
 			x=x_ball;
 			x_ball+=iterrator;
 		}
 
 		SDL_BlitSurface(image,NULL,screen,NULL);
-		SDL_Delay(2);
 		SDL_Flip(screen);
+		SDL_FreeSurface(image);
 	}
 
-	SDL_FreeSurface(image);
+	
 
 	Mix_FreeChunk(effect1);
 	Mix_FreeChunk(effect2);
